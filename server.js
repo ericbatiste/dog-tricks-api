@@ -1,7 +1,9 @@
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const trickData = require('./dog-tricks');
 
+app.use(cors());
 app.use(express.json());
 app.set('port', process.env.PORT || 3001);
 
@@ -17,6 +19,12 @@ app.get('/api/v1/dog-tricks/:id', (req, res) => {
   const trick = app.locals.dogTricks.find(trick => trick.id === req.params.id);
   trick ? res.status(200).json({ trick }) : res.sendStatus(404);
 });
+
+app.get('/api/v1/dog-tricks/search', (req, res) => {
+  const name = req.query;
+  const filteredResults = app.locals.dogTricks.filter(trick => trick.name.includes(name));
+  name ? res.json(filteredResults) : res.status(400).json();
+})
 
 app.post('/api/v1/dog-tricks', (req, res) => {
   const id = Date.now();
