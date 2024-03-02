@@ -20,14 +20,8 @@ app.get('/api/v1/dog-tricks/:id', (req, res) => {
   trick ? res.status(200).json({ trick }) : res.sendStatus(404);
 });
 
-app.get('/api/v1/dog-tricks/search', (req, res) => {
-  const name = req.query;
-  const filteredResults = app.locals.dogTricks.filter(trick => trick.name.includes(name));
-  name ? res.json(filteredResults) : res.status(400).json();
-})
-
 app.post('/api/v1/dog-tricks', (req, res) => {
-  const id = Date.now();
+  const id = Date.now().toString();
   const trick = req.body;
   for (let requiredParam of ['name', 'difficulty', 'tutorial']) {
     if (!trick[requiredParam]) {
